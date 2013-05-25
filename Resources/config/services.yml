@@ -1,0 +1,7 @@
+parameters:
+#    e_z_uncon.example.class: eZ\UnconBundle\Example
+
+services:
+#    e_z_uncon.example:
+#        class: %e_z_uncon.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

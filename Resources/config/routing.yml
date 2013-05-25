@@ -1,0 +1,3 @@
+e_z_uncon_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: eZUnconBundle:Default:index }
