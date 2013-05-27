@@ -4,9 +4,18 @@ namespace eZ\UnconBundle\eZ\FieldType\RegexString;
 use eZ\Publish\Core\FieldType\TextLine;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\UnconBundle\eZ\FieldType\Validator\RegexValidator;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 class Type extends TextLine\Type
 {
+    protected $validatorConfigurationSchema = array(
+        'RegexValidator' => array(
+            'Regex' => array(
+                'type' => 'string',
+            ),
+        )
+    );
+
     public function getFieldTypeIdentifier()
     {
         return "regexstring";
