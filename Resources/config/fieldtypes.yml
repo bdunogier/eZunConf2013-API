@@ -1,0 +1,9 @@
+parameters:
+    ezpublish.fieldType.regexstring.class: eZ\UnconBundle\eZ\FieldType\RegexString\Type
+
+services:
+    ezpublish.fieldType.ezauthor:
+        class: %ezpublish.fieldType.regexstring.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: regexstring}

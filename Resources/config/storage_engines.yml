@@ -1,0 +1,8 @@
+parameters:
+    ezpublish.fieldType.regexstring.converter.class: eZ\UnconBundle\eZ\FieldType\RegexString\LegacyConverter
+
+services:
+    ezpublish.fieldType.regexstring.converter:
+        class: %ezpublish.fieldType.regexstring.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: regexstring, lazy: true, callback: '::create'}
