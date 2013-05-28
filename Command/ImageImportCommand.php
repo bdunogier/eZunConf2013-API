@@ -33,32 +33,7 @@ class ImageImportCommand extends ContainerAwareCommand
             exit( 1 );
         }
 
-        $repository = $this->getContainer()->get( 'ezpublish.api.repository' );
-        $repository->setCurrentUser( $repository->getUserService()->loadUser( 14 ) );
-
-        $targetLocationId = $input->getArgument( 'target-location-id' );
-        $locationService = $this->getContainer()->get( 'ezpublish.api.repository' )->getLocationService();
-
-        try
-        {
-            $locationService->loadLocation( $targetLocationId );
-        }
-        catch ( \eZ\Publish\API\Repository\Exceptions\UnauthorizedException $e )
-        {
-            $output->writeln( $e->getMessage() );
-            exit( 1 );
-        }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
-        {
-            $output->writeln( $e->getMessage() );
-            exit( 1 );
-        }
-
-        $imageContentType = $this->getContainer()->get( 'ezpublish.api.repository' )->getContentTypeService()->loadContentTypeByIdentifier( 'image' );
-
-        $contentService = $this->getContainer()->get( 'ezpublish.api.repository' )->getContentService();
-
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $targetLocationId );
+        // check if the target location exists
 
         /** @var $file SplFileInfo */
         foreach ( new \DirectoryIterator( $sourcePath ) as $file )
@@ -66,24 +41,9 @@ class ImageImportCommand extends ContainerAwareCommand
             if ( !$file->isFile() || !in_array( $file->getExtension(), array( 'jpg', 'png', 'gif' ) ) )
                 continue;
 
-            $imageCreateStruct = $contentService->newContentCreateStruct(
-                $imageContentType, 'eng-GB'
-            );
+            $output->writeln( "Image: " . $file->getRealPath() );
 
-            $nameString = $file->getBasename( '.' . $file->getExtension() );
-            $imageCreateStruct->setField( 'name', $nameString );
-            $imageCreateStruct->setField( 'image', new \eZ\Publish\Core\FieldType\Image\Value(
-                array(
-                    'path' => $file->getRealPath(),
-                    'fileSize' => $file->getSize(),
-                    'fileName' =>$file->getBasename(),
-                    'alternativeText' => $nameString
-                )
-            ) );
-
-            $imageContent = $contentService->createContent( $imageCreateStruct, array( clone $locationCreateStruct ) );
-            $contentService->publishVersion( $imageContent->versionInfo );
-            $output->writeln( "published image $nameString with id #" . $imageContent->id );
+            // create content &publish it !
         }
     }
 }
